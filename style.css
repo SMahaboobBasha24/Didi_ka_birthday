@@ -18,6 +18,9 @@
   --radius-sm: 18px;
   --container: min(1120px, calc(100vw - 2rem));
   --ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --motion-fast: 220ms;
+  --motion-medium: 420ms;
+  --motion-slow: 720ms;
 }
 
 *,
@@ -28,6 +31,7 @@
 
 html {
   scroll-behavior: smooth;
+  overflow-y: auto;
 }
 
 body {
@@ -40,11 +44,36 @@ body {
     radial-gradient(circle at top right, rgba(208, 178, 255, 0.18), transparent 32%),
     linear-gradient(160deg, #130f1a 0%, #1f1425 38%, #261e34 100%);
   overflow-x: hidden;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 body.modal-open,
 body.lightbox-open {
   overflow: hidden;
+}
+
+body.is-scrolling .glass-panel,
+body.is-scrolling .glass-button,
+body.is-scrolling .story-slide__overlay {
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+
+body.is-scrolling .hero__backdrop,
+body.is-scrolling .orb,
+body.is-scrolling .hero__heart,
+body.is-scrolling .hero__scroll-hint span {
+  animation-play-state: paused;
+}
+
+body.is-scrolling .page-noise {
+  opacity: 0.06;
+}
+
+body.is-scrolling .cursor-glow {
+  opacity: 0 !important;
 }
 
 img {
@@ -68,16 +97,19 @@ button {
   position: fixed;
   inset: 0;
   pointer-events: none;
+  will-change: transform;
+  transform: translate3d(0, 0, 0);
+  backface-visibility: hidden;
 }
 
 .page-noise {
-  opacity: 0.14;
+  opacity: 0.08;
   background-image:
     radial-gradient(circle at 20% 20%, rgba(255, 255, 255, 0.15) 0 1px, transparent 1px),
     radial-gradient(circle at 80% 30%, rgba(255, 255, 255, 0.08) 0 1px, transparent 1px),
     radial-gradient(circle at 40% 70%, rgba(255, 255, 255, 0.08) 0 1px, transparent 1px);
   background-size: 140px 140px;
-  mix-blend-mode: soft-light;
+  mix-blend-mode: normal;
   z-index: -3;
 }
 
@@ -89,9 +121,12 @@ button {
 .orb {
   position: absolute;
   border-radius: 50%;
-  filter: blur(18px);
-  opacity: 0.5;
+  filter: blur(8px);
+  opacity: 0.38;
   animation: floatOrb 16s infinite ease-in-out;
+  will-change: transform;
+  transform: translate3d(0, 0, 0);
+  backface-visibility: hidden;
 }
 
 .orb-one {
@@ -178,8 +213,8 @@ button {
 .glass-button {
   background: linear-gradient(135deg, rgba(255, 255, 255, 0.16), rgba(255, 255, 255, 0.08));
   border: 1px solid var(--surface-border);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
   box-shadow: var(--shadow-soft);
 }
 
@@ -197,7 +232,9 @@ button {
   min-height: 52px;
   padding: 0.95rem 1.4rem;
   border-radius: 999px;
-  transition: transform 250ms var(--ease), box-shadow 250ms var(--ease), border-color 250ms var(--ease), background 250ms var(--ease);
+  transition: transform var(--motion-fast) var(--ease), box-shadow var(--motion-fast) var(--ease), border-color var(--motion-fast) var(--ease), background var(--motion-fast) var(--ease), opacity var(--motion-fast) var(--ease);
+  transform: translate3d(0, 0, 0);
+  backface-visibility: hidden;
 }
 
 .glass-button:hover,
@@ -261,6 +298,9 @@ button {
     radial-gradient(circle at 85% 10%, rgba(208, 178, 255, 0.24), transparent 30%),
     radial-gradient(circle at 50% 90%, rgba(255, 199, 160, 0.15), transparent 25%);
   animation: gradientShift 16s ease-in-out infinite alternate;
+  will-change: transform;
+  transform: translate3d(0, 0, 0);
+  backface-visibility: hidden;
 }
 
 .hero__content {
@@ -347,6 +387,7 @@ button {
 .finale-card {
   position: relative;
   overflow: hidden;
+  contain: layout paint;
 }
 
 .story__shell {
@@ -391,13 +432,15 @@ button {
   position: absolute;
   inset: 0;
   opacity: 0;
-  transform: scale(1.06);
-  transition: opacity 850ms var(--ease), transform 1200ms var(--ease);
+  transform: translate3d(0, 0, 0) scale(1.03);
+  transition: opacity var(--motion-medium) var(--ease), transform var(--motion-slow) var(--ease);
+  will-change: transform, opacity;
+  backface-visibility: hidden;
 }
 
 .story-slide.is-active {
   opacity: 1;
-  transform: scale(1);
+  transform: translate3d(0, 0, 0) scale(1);
 }
 
 .story-slide img {
@@ -412,7 +455,9 @@ button {
   padding: 1.25rem;
   border-radius: var(--radius-md);
   background: linear-gradient(180deg, rgba(13, 8, 18, 0.08), rgba(13, 8, 18, 0.6));
-  backdrop-filter: blur(14px);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  transform: translate3d(0, 0, 0);
 }
 
 .story-slide__eyebrow {
@@ -454,12 +499,18 @@ button {
   border-radius: var(--radius-md);
   overflow: hidden;
   box-shadow: var(--shadow-soft);
+  contain: layout paint;
+  transform: translate3d(0, 0, 0);
+  backface-visibility: hidden;
 }
 
 .gallery-card img {
   width: 100%;
   border-radius: inherit;
-  transition: transform 500ms var(--ease), filter 500ms var(--ease);
+  transition: transform var(--motion-medium) var(--ease), filter var(--motion-medium) var(--ease), opacity var(--motion-medium) var(--ease);
+  will-change: transform;
+  transform: translate3d(0, 0, 0);
+  backface-visibility: hidden;
 }
 
 .gallery-card::after {
@@ -539,6 +590,8 @@ button {
   position: relative;
   margin-left: 2.4rem;
   overflow: visible;
+  contain: layout paint;
+  transform: translate3d(0, 0, 0);
 }
 
 .timeline-card__dot {
@@ -637,6 +690,7 @@ button {
   object-fit: contain;
   border-radius: var(--radius-md);
   box-shadow: var(--shadow);
+  will-change: transform;
 }
 
 .lightbox__close,
@@ -731,13 +785,15 @@ button {
 
 .reveal {
   opacity: 0;
-  transform: translateY(26px) scale(0.98);
-  transition: opacity 700ms var(--ease), transform 700ms var(--ease);
+  transform: translate3d(0, 22px, 0) scale(0.985);
+  transition: opacity var(--motion-medium) var(--ease), transform var(--motion-medium) var(--ease);
+  will-change: transform, opacity;
+  backface-visibility: hidden;
 }
 
 .reveal.is-visible {
   opacity: 1;
-  transform: translateY(0) scale(1);
+  transform: translate3d(0, 0, 0) scale(1);
 }
 
 .reveal-delay-1 {
@@ -757,8 +813,28 @@ button {
 }
 
 [data-parallax] {
-  transition: transform 120ms linear;
   will-change: transform;
+}
+
+.section,
+.footer {
+  content-visibility: auto;
+  contain: layout paint style;
+  contain-intrinsic-size: 900px;
+}
+
+#hero {
+  content-visibility: visible;
+}
+
+.hero__content,
+.section-heading,
+.timeline__items,
+.message-card,
+.finale-card,
+.lightbox__image {
+  transform: translate3d(0, 0, 0);
+  backface-visibility: hidden;
 }
 
 @media (min-width: 700px) {
@@ -874,6 +950,24 @@ button {
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
+  }
+}
+
+@media (max-width: 979px) {
+  .page-noise,
+  .cursor-glow {
+    display: none;
+  }
+
+  .glass-panel,
+  .glass-button,
+  .story-slide__overlay {
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+
+  .orb {
+    filter: blur(4px);
   }
 }
 
