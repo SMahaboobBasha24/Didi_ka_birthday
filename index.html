@@ -1,1 +1,247 @@
-hi
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="A cinematic birthday surprise website made with love.">
+  <title>Happy Birthday Didi</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="page-noise" aria-hidden="true"></div>
+  <div class="cursor-glow" aria-hidden="true"></div>
+  <canvas class="confetti-canvas" aria-hidden="true"></canvas>
+
+  <div class="floating-orbs" aria-hidden="true">
+    <span class="orb orb-one"></span>
+    <span class="orb orb-two"></span>
+    <span class="orb orb-three"></span>
+    <span class="orb orb-four"></span>
+  </div>
+
+  <audio id="birthday-music" loop preload="none">
+    <source src="media/music/Happy_Birthday_To_You_Ji_Funny_Hindi_Birthday_Song_Part_1_Funzoa.mp3" type="audio/mpeg">
+  </audio>
+
+  <button class="music-toggle glass-button" type="button" aria-label="Play background music" data-playing="false">
+    <span class="music-toggle__icon">Play</span>
+    <span class="music-toggle__label">Music</span>
+  </button>
+
+  <main>
+    <section class="hero section" id="hero">
+      <div class="hero__backdrop"></div>
+      <div class="hero__content container">
+        <p class="eyebrow reveal">For the brightest and luckiest soul in the family</p>
+        <h1 class="hero__title reveal reveal-delay-1">
+          Many More Happy Returns of the Day,
+          <span class="hero__name gradient-text">Shaheen Didi</span>
+          <span class="hero__heart">&#128150;</span>
+        </h1>
+        <p class="hero__subtitle reveal reveal-delay-2">
+          A little cinematic site built just for you, filled with memories, warmth, and one final surprise hehe.
+        </p>
+        <div class="hero__actions reveal reveal-delay-3">
+          <button class="cta-button" id="begin-surprise" type="button">Tap to Begin the Surprise</button>
+        </div>
+      </div>
+      <div class="hero__scroll-hint reveal reveal-delay-4">
+        <span></span>
+        <p></p>
+      </div>
+    </section>
+
+    <section class="story section" id="story">
+      <div class="container">
+        <div class="section-heading reveal">
+          <p class="eyebrow">Story mode</p>
+          <h2>Moments that feel like a film</h2>
+        </div>
+        <div class="story__shell glass-panel reveal reveal-delay-1">
+          <div class="story__progress" aria-hidden="true">
+            <span class="story__progress-bar is-active"></span>
+            <span class="story__progress-bar"></span>
+            <span class="story__progress-bar"></span>
+            <span class="story__progress-bar"></span>
+          </div>
+          <div class="story__slides">
+            <article class="story-slide is-active" data-slide>
+              <img src="media/o-m/Picsart_26-04-23_15-52-07-900~2.jpg" alt="Warm celebration with balloons" loading="lazy">
+              <div class="story-slide__overlay">
+                <p class="story-slide__eyebrow">With Family</p>
+                <h3>A valuable time which you always wait & spend...</h3>
+              </div>
+            </article>
+            <article class="story-slide" data-slide>
+              <img src="media/photos/IMG-20220924-WA0014.jpg" alt="Friends and family celebrating together" loading="lazy">
+              <div class="story-slide__overlay">
+                <p class="story-slide__eyebrow">With Friends</p>
+                <h3>From childhood to till now and further too...</h3>
+              </div>
+            </article>
+            <article class="story-slide" data-slide>
+              <img src="media/photos/IMG-20250507-WA0004.jpg" alt="Portrait in golden light" loading="lazy">
+              <div class="story-slide__overlay">
+                <p class="story-slide__eyebrow">With Colleagues</p>
+                <h3>Having fun together with food included hehe...</h3>
+              </div>
+            </article>
+            <article class="story-slide" data-slide>
+              <img src="media/o-m/IMG20241019121113.jpg" alt="Dreamy lights and a festive atmosphere" loading="lazy">
+              <div class="story-slide__overlay">
+                <p class="story-slide__eyebrow">With me</p>
+                <h3>Creating memories that last a lifetime...</h3>
+              </div>
+            </article>
+          </div>
+          <div class="story__controls">
+            <button class="story__button glass-button" type="button" data-story-prev>Previous</button>
+            <button class="story__button glass-button" type="button" data-story-next>Next</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="gallery section" id="gallery">
+      <div class="container">
+        <div class="section-heading reveal">
+          <p class="eyebrow">Gallery</p>
+          <h2>A little wall of memories</h2>
+        </div>
+        <div class="gallery-grid">
+          <button class="gallery-card reveal" type="button" data-lightbox-index="0">
+            <img src="/media/o-m/DSC_0006.JPG" alt="Elegant outdoor portrait" loading="lazy">
+          </button>
+          </button>
+          <button class="gallery-card reveal" type="button" data-lightbox-index="3">
+            <img src="/media/o-m/DSC_0009.JPG" alt="Colorful balloons and party scene" loading="lazy">
+          </button>
+          <button class="gallery-card reveal reveal-delay-1 tall" type="button" data-lightbox-index="1">
+            <img src="/media/o-m/DSC_0032.JPG" loading="lazy">
+          </button>
+          <button class="gallery-card reveal reveal-delay-2" type="button" data-lightbox-index="2">
+            <img src="/media/o-m/DSC_1095.JPG" alt="Birthday dessert and candles" loading="lazy">
+          </button>
+          <button class="gallery-card reveal reveal-delay-2 tall" type="button" data-lightbox-index="5">
+            <img src="/media/o-m/DSC_0483.JPG" alt="Friends smiling together at an event" loading="lazy">
+          </button>
+          <button class="gallery-card reveal reveal-delay-2 tall" type="button" data-lightbox-index="5">
+            <img src="/media/o-m/DSC_0516.JPG" alt="Friends smiling together at an event" loading="lazy">
+          </button>
+          <button class="gallery-card reveal reveal-delay-2 tall" type="button" data-lightbox-index="5">
+            <img src="/media/o-m/DSC_0958.JPG" alt="Friends smiling together at an event" loading="lazy">
+          </button>
+          </button>
+          <button class="gallery-card reveal reveal-delay-2 tall" type="button" data-lightbox-index="5">
+            <img src="/media/o-m/PicsArt_06-16-10.35.39.png" alt="Friends smiling together at an event" loading="lazy">
+          </button>
+          </button>
+          <button class="gallery-card reveal reveal-delay-2 tall" type="button" data-lightbox-index="5">
+            <img src="/media/o-m/PicsArt_06-22-03.56.03.jpg" alt="Friends smiling together at an event" loading="lazy">
+          </button>
+          <button class="gallery-card reveal reveal-delay-2 tall" type="button" data-lightbox-index="5">
+            <img src="media\photos\SMS_5503.jpg" alt="Friends smiling together at an event" loading="lazy">
+          </button>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <section class="message section" id="message">
+      <div class="container">
+        <div class="message-card glass-panel reveal">
+          <p class="eyebrow">A note from your brother</p>
+          <h2>For the one who makes home feel softer and brighter</h2>
+          <p class="typing-text" data-typing-text="You deserve a year filled with gentle mornings, fearless dreams, loud laughter, and the kind of happiness that stays. Thank you for being such a beautiful soul, a constant light, and a forever favorite person in my life Didi."></p>
+        </div>
+      </div>
+    </section>
+
+    <section class="timeline section" id="timeline">
+      <div class="container">
+        <div class="section-heading reveal">
+          <p class="eyebrow">Timeline</p>
+          <h2>The memories that shaped our bond</h2>
+        </div>
+        <div class="timeline__line" aria-hidden="true"></div>
+        <div class="timeline__items">
+          <article class="timeline-card glass-panel reveal">
+            <div class="timeline-card__dot" aria-hidden="true"></div>
+            <img src="/media/o-m/DSC_0004.JPG" alt="Childhood celebration" loading="lazy">
+            <div class="timeline-card__content">
+              <span class="timeline-card__year">2015</span>
+              <h3>Childhood magic</h3>
+              <p>The era of tom & jerry fights, smiles, and the kind of joy only siblings understand.</p>
+            </div>
+          </article>
+          <article class="timeline-card glass-panel reveal reveal-delay-1">
+            <div class="timeline-card__dot" aria-hidden="true"></div>
+            <img src="/media/o-m/DSC_0142.JPG" alt="Family portrait with warm styling" loading="lazy">
+            <div class="timeline-card__content">
+              <span class="timeline-card__year">2018</span>
+              <h3>Growing stronger</h3>
+              <p>More confidence, more kindness, and a heart that kept taking care of everyone around it.</p>
+            </div>
+          </article>
+          <article class="timeline-card glass-panel reveal reveal-delay-2">
+            <div class="timeline-card__dot" aria-hidden="true"></div>
+            <img src="media/photos/IMG20240626104715.jpg" alt="Elegant portrait smiling at camera" loading="lazy">
+            <div class="timeline-card__content">
+              <span class="timeline-card__year">2024</span>
+              <h3>Becoming you</h3>
+              <p>You started shining in your own unmistakable way, and everyone around you felt it.</p>
+            </div>
+          </article>
+          <article class="timeline-card glass-panel reveal">
+            <div class="timeline-card__dot" aria-hidden="true"></div>
+            <img src="/media/photos/SMS_5569.jpg" alt="Close-up portrait in soft lighting" loading="lazy">
+            <div class="timeline-card__content">
+              <span class="timeline-card__year">Today</span>
+              <h3>This beautiful chapter</h3>
+              <p>Graceful, radiant, and deeply loved. This celebration is only a small reflection of what you mean to us.</p>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="finale section" id="finale">
+      <div class="container">
+        <div class="finale-card glass-panel reveal">
+          <p class="eyebrow">Final surprise</p>
+          <h2>One more moment before the credits roll</h2>
+          <p>Press the button and let the screen celebrate you the way our hearts already do.</p>
+          <button class="cta-button cta-button--gold" id="final-surprise" type="button">Click for Your Final Surprise &#127873;</button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <p>Made with &#10084;&#65039; by your brother</p>
+  </footer>
+
+  <div class="lightbox" id="lightbox" aria-hidden="true">
+    <button class="lightbox__close glass-button" type="button" aria-label="Close gallery">Close</button>
+    <button class="lightbox__nav lightbox__nav--prev glass-button" type="button" aria-label="Previous image">Prev</button>
+    <figure class="lightbox__figure">
+      <img class="lightbox__image" src="" alt="">
+    </figure>
+    <button class="lightbox__nav lightbox__nav--next glass-button" type="button" aria-label="Next image">Next</button>
+  </div>
+
+  <div class="surprise-modal" id="surprise-modal" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="surprise-title">
+    <div class="surprise-modal__backdrop" data-close-modal></div>
+    <div href = "assets/surprise/surprise.mp4" class="surprise-modal__content glass-panel">
+      <h2 id="surprise-title">Happy Birthday Didi! &#127881;</h2>
+            <img src="media/photos/Picsart_25-04-24_01-48-05-189.jpg" alt="Friends smiling together at an event" loading="lazy" height="600" width="500">
+      <button class="surprise-modal__close glass-button" type="button" aria-label="Close surprise modal" data-close-modal>Close</button>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
