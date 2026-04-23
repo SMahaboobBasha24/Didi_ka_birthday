@@ -20,6 +20,7 @@ const heartsContainer = document.querySelector(".surprise-modal__hearts");
 const typingElement = document.querySelector(".typing-text");
 const cursorGlow = document.querySelector(".cursor-glow");
 const confettiCanvas = document.querySelector(".confetti-canvas");
+const pageImages = Array.from(document.images);
 
 const galleryImages = galleryButtons.map((button) => {
   const image = button.querySelector("img");
@@ -35,6 +36,7 @@ let currentLightboxIndex = 0;
 let typingStarted = false;
 let confettiPieces = [];
 let confettiAnimationFrame = null;
+let heartIntervalId = null;
 
 function smoothScrollTo(element) {
   element.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -140,6 +142,7 @@ function createRevealObserver() {
     entries.forEach((entry) => {
       if (entry.isIntersecting) {
         entry.target.classList.add("is-visible");
+        revealObserver.unobserve(entry.target);
 
         if (entry.target.closest(".message-card")) {
           typeMessage();
@@ -155,33 +158,69 @@ function createRevealObserver() {
 
 function setupParallax() {
   const parallaxTargets = [
-    document.querySelector(".hero__backdrop"),
-    document.querySelector(".floating-orbs")
+    document.querySelector(".hero__backdrop")
   ].filter(Boolean);
+
+  if (!parallaxTargets.length || window.innerWidth <= 767 || navigator.hardwareConcurrency <= 4) {
+    return;
+  }
 
   parallaxTargets.forEach((element) => {
     element.dataset.parallax = "true";
   });
 
-  let ticking = false;
+  let rafId = null;
+  let latestScrollY = window.scrollY;
 
-  function updateParallax() {
-    const scrollY = window.scrollY;
-
+  function updateParallax(scrollY) {
     parallaxTargets.forEach((element, index) => {
       const intensity = (index + 1) * 0.02;
       const offset = scrollY * intensity;
       element.style.transform = `translate3d(0, ${offset}px, 0)`;
     });
 
-    ticking = false;
+    rafId = null;
   }
 
   window.addEventListener("scroll", () => {
-    if (!ticking && window.innerWidth > 767) {
-      window.requestAnimationFrame(updateParallax);
-      ticking = true;
+    if (window.innerWidth <= 767) {
+      return;
     }
+
+    latestScrollY = window.scrollY;
+
+    if (rafId === null) {
+      rafId = window.requestAnimationFrame(() => updateParallax(latestScrollY));
+    }
+  }, { passive: true });
+
+  updateParallax(latestScrollY);
+}
+
+function optimizeImages() {
+  pageImages.forEach((image) => {
+    image.decoding = "async";
+
+    if (image.loading === "lazy") {
+      image.fetchPriority = "low";
+    }
+  });
+}
+
+function setupScrollPerformanceMode() {
+  let scrollTimerId = null;
+
+  window.addEventListener("scroll", () => {
+    document.body.classList.add("is-scrolling");
+
+    if (scrollTimerId) {
+      window.clearTimeout(scrollTimerId);
+    }
+
+    scrollTimerId = window.setTimeout(() => {
+      document.body.classList.remove("is-scrolling");
+      scrollTimerId = null;
+    }, 140);
   }, { passive: true });
 }
 
@@ -190,10 +229,24 @@ function setupCursorGlow() {
     return;
   }
 
-  window.addEventListener("mousemove", (event) => {
+  let rafId = null;
+  let pointerX = 0;
+  let pointerY = 0;
+
+  function paintCursorGlow() {
     cursorGlow.style.opacity = "1";
-    cursorGlow.style.transform = `translate(${event.clientX - 110}px, ${event.clientY - 110}px)`;
-  });
+    cursorGlow.style.transform = `translate3d(${pointerX - 110}px, ${pointerY - 110}px, 0)`;
+    rafId = null;
+  }
+
+  window.addEventListener("mousemove", (event) => {
+    pointerX = event.clientX;
+    pointerY = event.clientY;
+
+    if (rafId === null) {
+      rafId = window.requestAnimationFrame(paintCursorGlow);
+    }
+  }, { passive: true });
 
   window.addEventListener("mouseleave", () => {
     cursorGlow.style.opacity = "0";
@@ -262,8 +315,6 @@ function spawnHeart() {
     heart.remove();
   }, 6500);
 }
-
-let heartIntervalId = null;
 
 function openSurpriseModal() {
   surpriseModal.classList.add("is-open");
@@ -359,6 +410,8 @@ lightbox?.addEventListener("click", (event) => {
 window.addEventListener("resize", resizeConfettiCanvas);
 
 createRevealObserver();
+optimizeImages();
+setupScrollPerformanceMode();
 setupParallax();
 setupCursorGlow();
 showSlide(0);
